@@ -3,6 +3,7 @@ import NumberInput from "./NumberInput";
 import Select from "./Select";
 import Button from "./Button";
 import { BoxWrapper } from "../pages/LandingPage";
+import { calculateTaxes } from "../utils/taxFunctions";
 
 type FormProps = {};
 
@@ -26,13 +27,21 @@ export const defaultOptions = [
 ];
 
 type FormData = {
-  income: number | null;
+  income: number;
   taxYear: string;
 };
 
+export type TaxBracket = {
+  min: number;
+  max?: number;
+  rate: number;
+};
+
+export type TaxBracketResponse = Record<string, TaxBracket[]>;
+
 const InputForm: React.FC<FormProps> = ({}) => {
   const [formData, setFormData] = React.useState<FormData>({
-    income: null,
+    income: 0,
     taxYear: defaultOptions[defaultOptions.length - 1].displayValue,
   });
 
@@ -67,9 +76,12 @@ const InputForm: React.FC<FormProps> = ({}) => {
     ],
   };
 
+  const { tax_brackets: taxBrackets } = mockTaxBracketData;
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("$onSubmit");
+    const taxesOwed = calculateTaxes(formData.income, taxBrackets);
+    console.log("$taxesOwed", taxesOwed);
   };
 
   const onChange = (e: any) => {
@@ -104,12 +116,7 @@ const InputForm: React.FC<FormProps> = ({}) => {
             onChange={onChange}
           />
           <br />
-          <Button
-            type="submit"
-            label="Calculate"
-            isDisabled={false}
-            onClick={() => console.log("submitted")}
-          />
+          <Button type="submit" label="Calculate" isDisabled={false} />
         </BoxWrapper>
       </fieldset>
     </form>
