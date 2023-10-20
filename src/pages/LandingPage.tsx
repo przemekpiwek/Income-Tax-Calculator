@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
 import NumberInput from "../components/NumberInput";
+import Select from "../components/Select";
 
 const Title = styled.h1`
     fo
@@ -25,6 +26,7 @@ const PageDivider = styled.div`
 `;
 
 const LandingPage = () => {
+  const mockOptions = [{ value: 123, displayValue: "123" }];
   return (
     <>
       <TitleWrapper>
@@ -38,7 +40,7 @@ const LandingPage = () => {
         <BoxWrapper>
           <NumberInput id="test" />
           <br />
-          Select Component
+          <Select id="test" options={mockOptions} />
           <br />
           <Button />
         </BoxWrapper>
