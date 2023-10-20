@@ -2,27 +2,9 @@ import * as React from "react";
 import Select from "./Select";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { render } from "@testing-library/react";
+import { defaultOptions } from "./Form";
 
 describe("Button", () => {
-  const defaultOptions = [
-    {
-      value: 2017,
-      displayValue: "2017",
-    },
-    {
-      value: 2018,
-      displayValue: "2018",
-    },
-    {
-      value: 2019,
-      displayValue: "2019",
-    },
-    {
-      value: 2020,
-      displayValue: "2020",
-    },
-  ];
-
   const defaultProps = {
     id: "test",
     options: defaultOptions,

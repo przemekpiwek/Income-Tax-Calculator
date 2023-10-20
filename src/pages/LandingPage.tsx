@@ -1,8 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import Button from "../components/Button";
-import NumberInput from "../components/NumberInput";
-import Select from "../components/Select";
+import InputForm from "../components/Form";
 
 const Title = styled.h1`
     fo
@@ -14,10 +12,10 @@ const TitleWrapper = styled.div`
   text-align: left;
 `;
 
-const BoxWrapper = styled.div`
+export const BoxWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: var(--white);
+  background-color: red;
 `;
 
 const PageDivider = styled.div`
@@ -26,7 +24,6 @@ const PageDivider = styled.div`
 `;
 
 const LandingPage = () => {
-  const mockOptions = [{ value: 123, displayValue: "123" }];
   return (
     <>
       <TitleWrapper>
@@ -37,13 +34,7 @@ const LandingPage = () => {
         </Subtitle>
       </TitleWrapper>
       <PageDivider>
-        <BoxWrapper>
-          <NumberInput id="test" />
-          <br />
-          <Select id="test" options={mockOptions} />
-          <br />
-          <Button />
-        </BoxWrapper>
+        <InputForm />
         <BoxWrapper>
           Title - estimated taxes owed
           <br />
