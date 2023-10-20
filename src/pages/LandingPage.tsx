@@ -1,49 +1,76 @@
-import * as React from "react";
 import styled from "styled-components";
 import InputForm from "../components/Form";
 
-const Title = styled.h1`
-    fo
+const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  margin: 64px 0;
 `;
-const Subtitle = styled.h2``;
+
+const Title = styled.h1``;
+const Subtitle = styled.h3``;
 const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
+  margin: 16px;
 `;
 
-export const BoxWrapper = styled.div`
+const ContentWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  background-color: red;
+  justify-content: space-between;
 `;
 
-const PageDivider = styled.div`
+export const Box = styled.div`
+  flex: 1;
+  margin: 30px;
+  padding: 30px;
+  box-shadow: 0 0 16px 4px var(--disabled);
+  border-radius: 5px;
+  position: relative;
+  background-color: var(--white);
+`;
+
+const BoxTitle = styled.div`
+  height: 50px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  background-color: var(--tertiary);
+  position: inherit;
+  top: 0;
+  border-radius: 5px 5px 0 0;
+  padding-left: 4px;
+`;
+
+const OutputContent = styled.div`
+  display: flex;
+  background: red;
+  height: 100%;
+  width: 100%;
+  padding-left: 4px;
 `;
 
 const LandingPage = () => {
   return (
-    <>
+    <PageWrapper>
       <TitleWrapper>
         <Title>Canada Income Tax Calculator</Title>
         <Subtitle>
-          How much do you owe? Get a quick and easy estimate of your taxes using
-          our online tax calculator
+          How much do you owe? Get an estimate of your taxes below!
         </Subtitle>
       </TitleWrapper>
-      <PageDivider>
-        <InputForm />
-        <BoxWrapper>
-          Title - estimated taxes owed
-          <br />
-          Calculated tax output
-          <br />
-          tax breakdown
-        </BoxWrapper>
-      </PageDivider>
-    </>
+      <ContentWrapper>
+        <Box>
+          <InputForm />
+        </Box>
+        <Box>
+          <BoxTitle>Calculated tax output</BoxTitle>
+          <OutputContent>Content....</OutputContent>
+        </Box>
+      </ContentWrapper>
+    </PageWrapper>
   );
 };
 

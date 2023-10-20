@@ -1,11 +1,22 @@
 import * as React from "react";
+import styled from "styled-components";
 import NumberInput from "./NumberInput";
 import Select from "./Select";
 import Button from "./Button";
-import { BoxWrapper } from "../pages/LandingPage";
 import { calculateTaxes } from "../utils/taxFunctions";
 
 type FormProps = {};
+
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: pink;
+`;
+
+const FlexBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 export const defaultOptions = [
   {
@@ -99,15 +110,15 @@ const InputForm: React.FC<FormProps> = ({}) => {
   return (
     <form onSubmit={onSubmit} data-testid="form">
       <fieldset>
-        <BoxWrapper>
+        <FormWrapper>
           <NumberInput
+            autofocus
             id="income"
             label="Annual income tax"
             placeholder="$90,000"
             legend="Enter your annual income tax"
             onChange={onChange}
           />
-          <br />
           <Select
             id="taxYear"
             legend="Select your tax year"
@@ -115,9 +126,10 @@ const InputForm: React.FC<FormProps> = ({}) => {
             options={defaultOptions}
             onChange={onChange}
           />
-          <br />
-          <Button type="submit" label="Calculate" isDisabled={false} />
-        </BoxWrapper>
+          <FlexBox>
+            <Button type="submit" label="Calculate" isDisabled={false} />
+          </FlexBox>
+        </FormWrapper>
       </fieldset>
     </form>
   );

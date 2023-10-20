@@ -1,6 +1,8 @@
 import * as React from "react";
+import styled from "styled-components";
 
 type InputProps = {
+  autofocus?: boolean;
   id: string;
   label?: string;
   value?: number;
@@ -9,6 +11,18 @@ type InputProps = {
   isDisabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
+const BaseInput = styled.input`
+  height: 40px;
+  border-radius: 8px;
+  border: 3px var(--secondary) solid;
+  margin: 16px;
+
+  &:focus {
+    outline: none;
+    border: 3px var(--primary) solid;
+  }
+`;
 
 const NumberInput: React.FC<InputProps> = ({
   id,
@@ -23,7 +37,7 @@ const NumberInput: React.FC<InputProps> = ({
     <>
       <legend>{legend}</legend>
       <label htmlFor={id}>{label}</label>
-      <input
+      <BaseInput
         data-testid="input"
         disabled={isDisabled}
         type="number"

@@ -13,6 +13,7 @@ export const COLORS = {
 };
 
 export const GlobalStyles = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css?family=Nunito:400');
  /* css reset */
  html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -59,7 +60,12 @@ table {
 }
 
 html {
+
+  font-family: "Nunito", sans-serif;
+  font-weight: 400;
+
     background-color: ${COLORS.tertiary};
+    --white:${COLORS.white};
     --text: ${COLORS.textPrimary};
     --disabled: ${COLORS.disabled};
     --primary: ${COLORS.primary};
@@ -69,5 +75,26 @@ html {
     --pending: ${COLORS.pending};
     --error: ${COLORS.error};
 }
+
+
+h1, h2, h3, h4, h5 {
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: 2.488rem;
+}
+
+h2 {font-size: 2.074rem; font-weight: 600;}
+
+h3 {font-size: 1.728rem; font-weight: 400;}
+
+h4 {font-size: 1.44rem;}
+
+h5 {font-size: 1.2rem;}
 
 `;

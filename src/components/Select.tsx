@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 type SelectProps = {
   id: string;
@@ -8,6 +9,18 @@ type SelectProps = {
   options: Array<Record<string, string | number>>;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
+
+const BaseSelect = styled.select`
+  height: 40px;
+  border-radius: 8px;
+  border: 3px var(--secondary) solid;
+  margin: 16px;
+
+  &:focus {
+    outline: none;
+    border: 3px var(--primary) solid;
+  }
+`;
 
 const Select: React.FC<SelectProps> = ({
   id,
@@ -28,9 +41,14 @@ const Select: React.FC<SelectProps> = ({
     <>
       <legend>{legend}</legend>
       <label htmlFor={id}>{label}</label>
-      <select id={id} value={value} onChange={onChange} data-testid="select">
+      <BaseSelect
+        id={id}
+        value={value}
+        onChange={onChange}
+        data-testid="select"
+      >
         {renderOptions()}
-      </select>
+      </BaseSelect>
     </>
   );
 };
