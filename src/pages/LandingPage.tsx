@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import Button from "../components/Button";
 
 const Title = styled.h1`
     fo
@@ -38,7 +39,7 @@ const LandingPage = () => {
           <br />
           Select Component
           <br />
-          Button Component
+          <Button />
         </BoxWrapper>
         <BoxWrapper>
           Title - estimated taxes owed
