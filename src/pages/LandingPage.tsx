@@ -39,7 +39,6 @@ const BoxTitle = styled.div`
   height: 50px;
   display: flex;
   align-items: center;
-  background-color: var(--tertiary);
   position: inherit;
   top: 0;
   border-radius: 5px 5px 0 0;
@@ -47,11 +46,15 @@ const BoxTitle = styled.div`
 `;
 
 const OutputContent = styled.div`
-  display: flex;
-  background: red;
   height: 100%;
   width: 100%;
   padding-left: 4px;
+  text-align: left;
+`;
+
+const ColoredLine = styled.hr`
+  border: 0;
+  border-top: 1px solid var(--disabled);
 `;
 
 const LandingPage = () => {
@@ -61,8 +64,8 @@ const LandingPage = () => {
       taxesPerBracket: [],
     });
 
-  const { totalTax } = calculatedTaxData;
-
+  const { totalTax, taxesPerBracket } = calculatedTaxData;
+  console.log("$taxesPerBracket", taxesPerBracket);
   return (
     <PageWrapper>
       <TitleWrapper>
@@ -76,8 +79,25 @@ const LandingPage = () => {
           <InputForm setCalculatedTaxData={setCalculatedTaxData} />
         </Box>
         <Box>
-          <BoxTitle>Calculated tax output</BoxTitle>
-          <OutputContent>{totalTax}</OutputContent>
+          <BoxTitle>Calculated tax output:</BoxTitle>
+          <OutputContent>
+            Estimated Tax Owed:{totalTax}
+            <ColoredLine />
+            <ul>
+              {taxesPerBracket.map((t, index) => (
+                <li key={index}>
+                  Min: {t.min}
+                  <br />
+                  Max: {t.max}
+                  <br />
+                  Tax: {t.tax}
+                  <br />
+                </li>
+              ))}
+            </ul>
+            <ColoredLine />
+            Effective Tax Rate
+          </OutputContent>
         </Box>
       </ContentWrapper>
     </PageWrapper>

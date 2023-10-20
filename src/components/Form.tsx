@@ -12,7 +12,6 @@ type FormProps = {
 const FormWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background: pink;
 `;
 
 const FlexBox = styled.div`
@@ -40,7 +39,7 @@ export const defaultOptions = [
 ];
 
 type FormData = {
-  income: number;
+  income: string;
   taxYear: string;
 };
 
@@ -51,14 +50,13 @@ export type TaxBracket = {
 };
 
 export type TaxBracketResponse = Record<string, TaxBracket[]>;
+const defaultFormState = {
+  income: "",
+  taxYear: defaultOptions[defaultOptions.length - 1].displayValue,
+};
 
 const InputForm: React.FC<FormProps> = ({ setCalculatedTaxData }) => {
-  const [formData, setFormData] = React.useState<FormData>({
-    income: 0,
-    taxYear: defaultOptions[defaultOptions.length - 1].displayValue,
-  });
-
-  console.log("$formData", formData);
+  const [formData, setFormData] = React.useState<FormData>(defaultFormState);
 
   const mockTaxBracketData = {
     tax_brackets: [
@@ -89,12 +87,20 @@ const InputForm: React.FC<FormProps> = ({ setCalculatedTaxData }) => {
     ],
   };
 
+  const resetForm = () => {
+    console.log("RESET FORM");
+    setFormData(defaultFormState);
+  };
+
   const { tax_brackets: taxBrackets } = mockTaxBracketData;
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const result = calculateTaxes(formData.income, taxBrackets);
+
+    const incomeNumber = formData.income === "" ? 0 : Number(formData.income);
+    const result = calculateTaxes(incomeNumber, taxBrackets);
     setCalculatedTaxData(result);
+    resetForm();
   };
 
   const onChange = (
@@ -102,12 +108,9 @@ const InputForm: React.FC<FormProps> = ({ setCalculatedTaxData }) => {
   ) => {
     const key = e.target.id;
 
-    const newValue =
-      key === "income" ? parseFloat(e.target.value) : e.target.value;
-
     setFormData((prevForm) => ({
       ...prevForm,
-      [key]: newValue,
+      [key]: e.target.value,
     }));
   };
 
@@ -121,12 +124,14 @@ const InputForm: React.FC<FormProps> = ({ setCalculatedTaxData }) => {
             label="Annual income tax"
             placeholder="$90,000"
             legend="Enter your annual income tax"
+            value={formData.income}
             onChange={onChange}
           />
           <Select
             id="taxYear"
             legend="Select your tax year"
             label="Tax Year"
+            value={formData.taxYear}
             options={defaultOptions}
             onChange={onChange}
           />

@@ -5,7 +5,7 @@ type InputProps = {
   autofocus?: boolean;
   id: string;
   label?: string;
-  value?: number;
+  value?: string;
   legend?: string;
   placeholder?: string;
   isDisabled?: boolean;
