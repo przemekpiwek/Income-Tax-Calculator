@@ -29,30 +29,39 @@ describe("calculateTaxes", () => {
   ];
 
   it("should return zero upon receiving a negative income", () => {
-    expect(calculateTaxes(-10000, mockTaxBrackets)).toEqual(0.0);
+    const { totalTax } = calculateTaxes(-10000, mockTaxBrackets);
+    expect(totalTax).toEqual(0.0);
   });
 
   it("should return zero upon receiving income of zero", () => {
-    expect(calculateTaxes(0, mockTaxBrackets)).toEqual(0.0);
+    const { totalTax } = calculateTaxes(0, mockTaxBrackets);
+    expect(totalTax).toEqual(0.0);
   });
 
   it("should return correct taxes owed for an income within the first bracket", () => {
-    expect(calculateTaxes(25000, mockTaxBrackets)).toEqual(3750.0);
+    const { totalTax } = calculateTaxes(25000, mockTaxBrackets);
+    expect(totalTax).toEqual(3750.0);
   });
 
   it("should return correct taxes owed for an income within the second bracket", () => {
-    expect(calculateTaxes(85000, mockTaxBrackets)).toEqual(14664.16);
+    const { totalTax } = calculateTaxes(85000, mockTaxBrackets);
+    expect(totalTax).toEqual(14664.16);
   });
 
   it("should return correct taxes owed for an income within the third bracket", () => {
-    expect(calculateTaxes(120000, mockTaxBrackets)).toEqual(22917.6);
+    const { totalTax } = calculateTaxes(120000, mockTaxBrackets);
+    expect(totalTax).toEqual(22917.6);
   });
 
   it("should return correct taxes owed for an income within the fourth bracket", () => {
-    expect(calculateTaxes(200000, mockTaxBrackets)).toEqual(45048.85);
+    const { totalTax } = calculateTaxes(200000, mockTaxBrackets);
+    expect(totalTax).toEqual(45048.85);
   });
 
   it("should return correct taxes owed for an income within the fifth bracket", () => {
-    expect(calculateTaxes(230000, mockTaxBrackets)).toEqual(54080.53);
+    const { totalTax } = calculateTaxes(230000, mockTaxBrackets);
+    expect(totalTax).toEqual(54080.53);
   });
+
+  it.todo("tests covering the correct bracket taxes");
 });

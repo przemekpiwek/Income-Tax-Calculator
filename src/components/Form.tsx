@@ -3,9 +3,11 @@ import styled from "styled-components";
 import NumberInput from "./NumberInput";
 import Select from "./Select";
 import Button from "./Button";
-import { calculateTaxes } from "../utils/taxFunctions";
+import { CalculateTaxesResponse, calculateTaxes } from "../utils/taxFunctions";
 
-type FormProps = {};
+type FormProps = {
+  setCalculatedTaxData: (param: CalculateTaxesResponse) => void;
+};
 
 const FormWrapper = styled.div`
   display: flex;
@@ -50,7 +52,7 @@ export type TaxBracket = {
 
 export type TaxBracketResponse = Record<string, TaxBracket[]>;
 
-const InputForm: React.FC<FormProps> = ({}) => {
+const InputForm: React.FC<FormProps> = ({ setCalculatedTaxData }) => {
   const [formData, setFormData] = React.useState<FormData>({
     income: 0,
     taxYear: defaultOptions[defaultOptions.length - 1].displayValue,
@@ -91,11 +93,13 @@ const InputForm: React.FC<FormProps> = ({}) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const taxesOwed = calculateTaxes(formData.income, taxBrackets);
-    console.log("$taxesOwed", taxesOwed);
+    const result = calculateTaxes(formData.income, taxBrackets);
+    setCalculatedTaxData(result);
   };
 
-  const onChange = (e: any) => {
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const key = e.target.id;
 
     const newValue =

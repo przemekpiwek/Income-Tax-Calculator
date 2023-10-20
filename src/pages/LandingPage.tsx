@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import InputForm from "../components/Form";
+import * as React from "react";
+import { CalculateTaxesResponse } from "../utils/taxFunctions";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -53,6 +55,14 @@ const OutputContent = styled.div`
 `;
 
 const LandingPage = () => {
+  const [calculatedTaxData, setCalculatedTaxData] =
+    React.useState<CalculateTaxesResponse>({
+      totalTax: 0,
+      taxesPerBracket: [],
+    });
+
+  const { totalTax } = calculatedTaxData;
+
   return (
     <PageWrapper>
       <TitleWrapper>
@@ -63,11 +73,11 @@ const LandingPage = () => {
       </TitleWrapper>
       <ContentWrapper>
         <Box>
-          <InputForm />
+          <InputForm setCalculatedTaxData={setCalculatedTaxData} />
         </Box>
         <Box>
           <BoxTitle>Calculated tax output</BoxTitle>
-          <OutputContent>Content....</OutputContent>
+          <OutputContent>{totalTax}</OutputContent>
         </Box>
       </ContentWrapper>
     </PageWrapper>

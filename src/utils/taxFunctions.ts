@@ -1,10 +1,19 @@
 import { TaxBracket } from "../components/Form";
 
-export const calculateTaxes = (income: number, taxBrackets: TaxBracket[]) => {
+export type CalculateTaxesResponse = {
+  totalTax: number;
+  taxesPerBracket: Array<TaxBracket & { tax: number }>;
+};
+
+export const calculateTaxes = (
+  income: number,
+  taxBrackets: TaxBracket[]
+): CalculateTaxesResponse => {
   let totalTax = 0;
   let remainingIncome = income;
+  const taxesPerBracket = [];
 
-  if (income < 0) return 0;
+  if (income < 0) return { totalTax: 0, taxesPerBracket: [] };
 
   for (let i = 0; i < taxBrackets.length; i++) {
     const taxBracket = taxBrackets[i];
@@ -23,9 +32,17 @@ export const calculateTaxes = (income: number, taxBrackets: TaxBracket[]) => {
 
     totalTax += taxableAmountForBracket * taxBracketRate;
 
+    taxesPerBracket.push({
+      ...taxBracket,
+      tax: taxableAmountForBracket,
+    });
+
     remainingIncome -= taxableAmountForBracket;
   }
-  return Number(totalTax.toFixed(2));
+  return {
+    totalTax: Number(totalTax.toFixed(2)),
+    taxesPerBracket,
+  };
 };
 
 export {};
