@@ -1,6 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
+import NumberInput from "../components/NumberInput";
 
 const Title = styled.h1`
     fo
@@ -35,7 +36,7 @@ const LandingPage = () => {
       </TitleWrapper>
       <PageDivider>
         <BoxWrapper>
-          Input Component
+          <NumberInput id="test" />
           <br />
           Select Component
           <br />
