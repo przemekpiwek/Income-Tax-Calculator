@@ -6,7 +6,7 @@ type SelectProps = {
   legend?: string;
   value?: string;
   options: Array<Record<string, string | number>>;
-  onChange?: () => void;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 const Select: React.FC<SelectProps> = ({

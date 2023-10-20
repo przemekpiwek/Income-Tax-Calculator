@@ -7,7 +7,7 @@ type InputProps = {
   legend?: string;
   placeholder?: string;
   isDisabled?: boolean;
-  onChange?: () => {};
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const NumberInput: React.FC<InputProps> = ({
