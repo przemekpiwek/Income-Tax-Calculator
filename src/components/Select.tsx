@@ -4,21 +4,33 @@ import styled from "styled-components";
 type SelectProps = {
   id: string;
   label?: string;
-  legend?: string;
   value?: string;
   options: Array<Record<string, string | number>>;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
+const SelectWrapper = styled.div`
+  position: relative;
+  margin: 15px 0px;
+`;
+
+const Label = styled.label`
+  position: absolute;
+  pointer-events: none;
+  left: 20px;
+  top: -10px;
+`;
+
 const BaseSelect = styled.select`
-  height: 40px;
+  height: 56px;
   border-radius: 8px;
-  border: 3px var(--secondary) solid;
+  border: 2px var(--secondary) solid;
   margin: 16px;
+  width: 100%;
 
   &:focus {
     outline: none;
-    border: 3px var(--primary) solid;
+    border: 4px var(--primary) solid;
   }
 `;
 
@@ -26,7 +38,6 @@ const Select: React.FC<SelectProps> = ({
   id,
   label,
   value,
-  legend,
   options,
   onChange,
 }) => {
@@ -38,9 +49,8 @@ const Select: React.FC<SelectProps> = ({
     ));
 
   return (
-    <>
-      <legend>{legend}</legend>
-      <label htmlFor={id}>{label}</label>
+    <SelectWrapper>
+      <Label htmlFor={id}>{label}</Label>
       <BaseSelect
         id={id}
         value={value}
@@ -49,7 +59,7 @@ const Select: React.FC<SelectProps> = ({
       >
         {renderOptions()}
       </BaseSelect>
-    </>
+    </SelectWrapper>
   );
 };
 

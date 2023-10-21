@@ -13,17 +13,16 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 100%;
-  margin: 64px 0;
+  width: 90%;
+  margin: 64px;
 `;
 
-const Title = styled.h1``;
-const Subtitle = styled.h3``;
 const TitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: left;
+  text-align: center;
   margin: 16px;
+  padding-bottom: 48px;
 `;
 
 const ContentWrapper = styled.div`
@@ -35,27 +34,60 @@ export const Box = styled.div`
   flex: 1;
   margin: 30px;
   padding: 30px;
-  box-shadow: 0 0 16px 4px var(--disabled);
   border-radius: 5px;
   position: relative;
-  background-color: var(--white);
 `;
 
-const BoxTitle = styled.div`
-  height: 50px;
+const ReportWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
+  width: 55%;
+  box-shadow: 0 10px 40px #0000001a;
+  background: var(--white);
+  border-radius: 5px;
+  padding: 16px;
+`;
+
+const ReportResult = styled.div`
   display: flex;
-  align-items: center;
-  position: inherit;
-  top: 0;
-  border-radius: 5px 5px 0 0;
-  padding-left: 4px;
+  flex-direction: column;
+  width: 80%;
 `;
 
-const OutputContent = styled.div`
-  height: 100%;
+const ResultRow = styled.li`
+  border-top: 1px solid #0000001a;
+  padding-top: 8px;
+  padding-bottom: 8px;
+`;
+
+const ResultRowContent = styled.div`
+  display: flex;
+  justify-content: space-between;
   width: 100%;
-  padding-left: 4px;
-  text-align: left;
+  align-items: center;
+  margin: 0;
+`;
+const ResultRowItemBold = styled.span`
+  font-weight: 600;
+`;
+const ResultRowItemRegular = styled.span`
+  font-weight: 400;
+`;
+const ResultRowItemLight = styled.span`
+  font-weight: 200;
+`;
+
+type StatusBarProps = {
+  isVisible: boolean;
+};
+
+const StatusBar = styled.div<StatusBarProps>`
+  background: red;
+  margin: 16px 0px;
+  display: block;
+  text-align: center;
+  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
 `;
 
 export const defaultTaxYearOptions: TaxYearOption[] = [
@@ -83,19 +115,31 @@ const defaultUserFormState = {
 };
 
 const TaxCalculator = () => {
+  const [isMousingOverButton, setIsMousingOverButton] =
+    React.useState<boolean>(false);
   const [calculatedTaxData, setCalculatedTaxData] =
     React.useState<CalculateTaxesResponse>({
+      income: 0,
       totalTax: 0,
       taxesPerBracket: [],
     });
-
+  const [hasSubmitted, setHasSubmitted] = React.useState<boolean>(false);
   const [formData, setFormData] = React.useState<UserFormFormData>({
     ...defaultUserFormState,
   });
 
+  const onButtonMouseEnter = () => {
+    setIsMousingOverButton(true);
+  };
+
+  const onButtonMouseLeave = () => {
+    setIsMousingOverButton(false);
+  };
+
   const resetForm = () => {
     console.log("RESET FORM");
     setFormData(defaultUserFormState);
+    setHasSubmitted(false);
   };
 
   const onChange = (
@@ -109,23 +153,35 @@ const TaxCalculator = () => {
     }));
   };
 
-  const { data, isError, isLoading } = useQuery(
+  const { data, isError, isLoading, isSuccess, error, ...rest } = useQuery(
     ["taxBracket", formData.taxYear],
     () => fetchTaxBrackets(formData.taxYear)
   );
 
-  console.log("$data", data);
+  console.log(
+    "$data, iserror, islOading, error",
+    data,
+    isError,
+    isLoading,
+    error,
+    rest
+  );
+
+  const showErrorStatus = isMousingOverButton && isError;
+  const showSuccessStatus = hasSubmitted && isSuccess;
 
   const { totalTax, taxesPerBracket } = calculatedTaxData;
 
   return (
     <PageWrapper>
       <TitleWrapper>
-        <Title>Canada Income Tax Calculator</Title>
-        <Subtitle>
-          How much do you owe? Get an estimate of your taxes below!
-        </Subtitle>
+        <h1>Canada Income Tax Calculator</h1>
+        <h3>How much do you owe? Get an estimate of your taxes below!</h3>
       </TitleWrapper>
+      <StatusBar isVisible={showErrorStatus || showSuccessStatus}>
+        {showErrorStatus && <div>Error</div>}
+        {showSuccessStatus && <div>Success</div>}
+      </StatusBar>
       <ContentWrapper>
         <Box>
           <UserForm
@@ -133,29 +189,44 @@ const TaxCalculator = () => {
             formData={formData}
             resetForm={resetForm}
             defaultTaxYearOptions={defaultTaxYearOptions}
-            setCalculatedTaxData={setCalculatedTaxData}
+            disableButton={isLoading || isError}
+            onButtonMouseEnter={onButtonMouseEnter}
+            onButtonMouseLeave={onButtonMouseLeave}
             onChange={onChange}
+            setCalculatedTaxData={setCalculatedTaxData}
           />
         </Box>
-        <Box>
-          <BoxTitle>Calculated tax output:</BoxTitle>
-          <OutputContent>
-            Estimated Tax Owed:{totalTax}
+        <ReportWrapper>
+          <h3>Your Results:</h3>
+          <ReportResult>
             <ul>
-              {taxesPerBracket.map((t, index) => (
-                <li key={index}>
-                  Min: {t.min}
-                  <br />
-                  Max: {t.max}
-                  <br />
-                  Tax: {t.tax}
-                  <br />
-                </li>
-              ))}
+              <ResultRow>
+                <ResultRowContent>
+                  <ResultRowItemBold>Total Tax:</ResultRowItemBold>
+                  <ResultRowItemBold>$123123123</ResultRowItemBold>
+                </ResultRowContent>
+              </ResultRow>
+              <ResultRow>
+                <ResultRowContent>
+                  <ResultRowItemBold>Tax Breakdown:</ResultRowItemBold>
+                  <ResultRowItemBold></ResultRowItemBold>
+                </ResultRowContent>
+              </ResultRow>
+              <ResultRow>
+                <ResultRowContent>
+                  <ResultRowItemRegular>Tax Breakdown:</ResultRowItemRegular>
+                  <ResultRowItemRegular></ResultRowItemRegular>
+                </ResultRowContent>
+              </ResultRow>
+              <ResultRow>
+                <ResultRowContent>
+                  <ResultRowItemBold>Effective Tax:</ResultRowItemBold>
+                  <ResultRowItemBold>123%</ResultRowItemBold>
+                </ResultRowContent>
+              </ResultRow>
             </ul>
-            Effective Tax Rate
-          </OutputContent>
-        </Box>
+          </ReportResult>
+        </ReportWrapper>
       </ContentWrapper>
     </PageWrapper>
   );

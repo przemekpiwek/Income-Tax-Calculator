@@ -6,21 +6,39 @@ type InputProps = {
   id: string;
   label?: string;
   value?: string;
-  legend?: string;
   placeholder?: string;
   isDisabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
+const InputWrapper = styled.div`
+  position: relative;
+  margin: 15px 0px;
+`;
+
+const Label = styled.label`
+  position: absolute;
+  pointer-events: none;
+  left: 20px;
+  top: -10px;
+`;
+
 const BaseInput = styled.input`
-  height: 40px;
+  height: 50px;
   border-radius: 8px;
-  border: 3px var(--secondary) solid;
+  border: 2px var(--secondary) solid;
   margin: 16px;
+  width: 100%;
 
   &:focus {
     outline: none;
-    border: 3px var(--primary) solid;
+    border: 4px var(--primary) solid;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 `;
 
@@ -28,15 +46,13 @@ const NumberInput: React.FC<InputProps> = ({
   id,
   label,
   value,
-  legend,
   placeholder,
   isDisabled,
   onChange,
 }) => {
   return (
-    <>
-      <legend>{legend}</legend>
-      <label htmlFor={id}>{label}</label>
+    <InputWrapper>
+      <Label htmlFor={id}>{label}</Label>
       <BaseInput
         data-testid="input"
         disabled={isDisabled}
@@ -46,7 +62,7 @@ const NumberInput: React.FC<InputProps> = ({
         value={value}
         onChange={onChange}
       />
-    </>
+    </InputWrapper>
   );
 };
 

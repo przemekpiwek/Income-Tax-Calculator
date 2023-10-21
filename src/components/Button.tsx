@@ -8,7 +8,7 @@ type ButtonProps = {
 };
 
 const BaseButton = styled.button`
-  height: 40px;
+  height: 50px;
   width: 124px;
   color: var(--white);
   background: var(--secondary);
@@ -20,11 +20,21 @@ const BaseButton = styled.button`
   &:hover {
     background-color: var(--primary);
   }
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 `;
 
 const Button: React.FC<ButtonProps> = ({ type, label, isDisabled }) => {
   return (
-    <BaseButton type={type} disabled={isDisabled}>
+    <BaseButton
+      type={type}
+      disabled={isDisabled}
+      onMouseEnter={() => console.log("yese")}
+      onMouseLeave={() => console.log("yee")}
+    >
       {label}
     </BaseButton>
   );

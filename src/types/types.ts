@@ -22,6 +22,7 @@ export type TaxBracket = {
 export type TaxBracketResponse = Record<string, TaxBracket[]>;
 
 export type CalculateTaxesResponse = {
+  income: number;
   totalTax: number;
   taxesPerBracket: Array<TaxBracket & { tax: number }>;
 };

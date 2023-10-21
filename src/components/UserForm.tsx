@@ -15,7 +15,10 @@ type FormProps = {
   taxBrackets: TaxBracket[];
   formData: UserFormFormData;
   defaultTaxYearOptions: TaxYearOption[];
+  disableButton: boolean;
   resetForm: () => void;
+  onButtonMouseEnter: () => void;
+  onButtonMouseLeave: () => void;
   setCalculatedTaxData: (param: CalculateTaxesResponse) => void;
   onChange: (
     e:
@@ -38,9 +41,12 @@ const UserForm: React.FC<FormProps> = ({
   taxBrackets,
   formData,
   defaultTaxYearOptions,
-  setCalculatedTaxData,
   resetForm,
+  disableButton,
+  onButtonMouseEnter,
+  onButtonMouseLeave,
   onChange,
+  setCalculatedTaxData,
 }) => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,20 +66,25 @@ const UserForm: React.FC<FormProps> = ({
             id="income"
             label="Annual income tax"
             placeholder="$90,000"
-            legend="Enter your annual income tax"
             value={formData.income}
             onChange={onChange}
           />
           <Select
             id="taxYear"
-            legend="Select your tax year"
             label="Tax Year"
             value={formData.taxYear}
             options={defaultTaxYearOptions}
             onChange={onChange}
           />
-          <FlexBox>
-            <Button type="submit" label="Calculate" isDisabled={false} />
+          <FlexBox
+            onMouseEnter={onButtonMouseEnter}
+            onMouseLeave={onButtonMouseLeave}
+          >
+            <Button
+              type="submit"
+              label="Calculate"
+              isDisabled={disableButton}
+            />
           </FlexBox>
         </FormWrapper>
       </fieldset>
