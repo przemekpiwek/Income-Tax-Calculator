@@ -17,6 +17,7 @@ type FormProps = {
   defaultTaxYearOptions: TaxYearOption[];
   disableButton: boolean;
   resetForm: () => void;
+  setHasSubmitted: (param: boolean) => void;
   onButtonMouseEnter: () => void;
   onButtonMouseLeave: () => void;
   setCalculatedTaxData: (param: CalculateTaxesResponse) => void;
@@ -43,6 +44,7 @@ const UserForm: React.FC<FormProps> = ({
   defaultTaxYearOptions,
   resetForm,
   disableButton,
+  setHasSubmitted,
   onButtonMouseEnter,
   onButtonMouseLeave,
   onChange,
@@ -51,9 +53,10 @@ const UserForm: React.FC<FormProps> = ({
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const incomeNumber = formData.income === "" ? 0 : Number(formData.income);
+    const incomeNumber = Number(formData.income);
     const result = calculateTaxes(incomeNumber, taxBrackets);
     setCalculatedTaxData(result);
+    setHasSubmitted(true);
     resetForm();
   };
 

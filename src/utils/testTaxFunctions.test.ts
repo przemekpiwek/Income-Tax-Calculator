@@ -64,4 +64,5 @@ describe("calculateTaxes", () => {
   });
 
   it.todo("tests covering the correct bracket taxes");
+  it.todo("tests covering effective tax rate");
 });

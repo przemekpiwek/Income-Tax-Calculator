@@ -29,12 +29,7 @@ const BaseButton = styled.button`
 
 const Button: React.FC<ButtonProps> = ({ type, label, isDisabled }) => {
   return (
-    <BaseButton
-      type={type}
-      disabled={isDisabled}
-      onMouseEnter={() => console.log("yese")}
-      onMouseLeave={() => console.log("yee")}
-    >
+    <BaseButton type={type} disabled={isDisabled}>
       {label}
     </BaseButton>
   );

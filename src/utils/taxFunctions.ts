@@ -1,9 +1,4 @@
-import { TaxBracket } from "../components/Form";
-
-export type CalculateTaxesResponse = {
-  totalTax: number;
-  taxesPerBracket: Array<TaxBracket & { tax: number }>;
-};
+import { CalculateTaxesResponse, TaxBracket } from "../types/types";
 
 export const calculateTaxes = (
   income: number,
@@ -13,7 +8,7 @@ export const calculateTaxes = (
   let remainingIncome = income;
   const taxesPerBracket = [];
 
-  if (income < 0) return { totalTax: 0, taxesPerBracket: [] };
+  if (income < 0) return { income, totalTax: 0, taxesPerBracket: [] };
 
   for (let i = 0; i < taxBrackets.length; i++) {
     const taxBracket = taxBrackets[i];
@@ -30,19 +25,26 @@ export const calculateTaxes = (
       remainingIncome
     );
 
-    totalTax += taxableAmountForBracket * taxBracketRate;
+    const totalTaxForBracket = taxableAmountForBracket * taxBracketRate;
+
+    totalTax += totalTaxForBracket;
 
     taxesPerBracket.push({
       ...taxBracket,
-      tax: taxableAmountForBracket,
+      tax: totalTax,
     });
 
     remainingIncome -= taxableAmountForBracket;
   }
   return {
+    income,
     totalTax: Number(totalTax.toFixed(2)),
     taxesPerBracket,
   };
 };
 
-export {};
+export const getEffectiveTaxRate = (totalTax: number, income: number) => {
+  if (income === 0) return 0;
+
+  return (totalTax / income) * 100;
+};

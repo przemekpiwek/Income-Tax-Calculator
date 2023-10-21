@@ -1,13 +1,13 @@
 import * as React from "react";
 import Select from "./Select";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { render } from "@testing-library/react";
-import { defaultOptions } from "./Form";
+import { defaultTaxYearOptions } from "../pages/TaxCalculator";
 
 describe("Button", () => {
   const defaultProps = {
     id: "test",
-    options: defaultOptions,
+    options: defaultTaxYearOptions,
   };
   it("should render correctly", () => {
     render(<Select {...defaultProps} />);

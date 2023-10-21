@@ -8,6 +8,8 @@ import {
   TaxYearOption,
   UserFormFormData,
 } from "../types/types";
+import StatusBar, { Status } from "../components/StatusBar";
+import ResultsReport from "../components/ResultsReport";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -38,58 +40,6 @@ export const Box = styled.div`
   position: relative;
 `;
 
-const ReportWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr;
-  width: 55%;
-  box-shadow: 0 10px 40px #0000001a;
-  background: var(--white);
-  border-radius: 5px;
-  padding: 16px;
-`;
-
-const ReportResult = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-`;
-
-const ResultRow = styled.li`
-  border-top: 1px solid #0000001a;
-  padding-top: 8px;
-  padding-bottom: 8px;
-`;
-
-const ResultRowContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
-  margin: 0;
-`;
-const ResultRowItemBold = styled.span`
-  font-weight: 600;
-`;
-const ResultRowItemRegular = styled.span`
-  font-weight: 400;
-`;
-const ResultRowItemLight = styled.span`
-  font-weight: 200;
-`;
-
-type StatusBarProps = {
-  isVisible: boolean;
-};
-
-const StatusBar = styled.div<StatusBarProps>`
-  background: red;
-  margin: 16px 0px;
-  display: block;
-  text-align: center;
-  visibility: ${({ isVisible }) => (isVisible ? "visible" : "hidden")};
-`;
-
 export const defaultTaxYearOptions: TaxYearOption[] = [
   {
     value: 2017,
@@ -117,16 +67,16 @@ const defaultUserFormState = {
 const TaxCalculator = () => {
   const [isMousingOverButton, setIsMousingOverButton] =
     React.useState<boolean>(false);
+  const [hasSubmitted, setHasSubmitted] = React.useState<boolean>(false);
+  const [formData, setFormData] = React.useState<UserFormFormData>({
+    ...defaultUserFormState,
+  });
   const [calculatedTaxData, setCalculatedTaxData] =
     React.useState<CalculateTaxesResponse>({
       income: 0,
       totalTax: 0,
       taxesPerBracket: [],
     });
-  const [hasSubmitted, setHasSubmitted] = React.useState<boolean>(false);
-  const [formData, setFormData] = React.useState<UserFormFormData>({
-    ...defaultUserFormState,
-  });
 
   const onButtonMouseEnter = () => {
     setIsMousingOverButton(true);
@@ -146,31 +96,26 @@ const TaxCalculator = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const key = e.target.id;
-
     setFormData((prevForm) => ({
       ...prevForm,
       [key]: e.target.value,
     }));
   };
 
-  const { data, isError, isLoading, isSuccess, error, ...rest } = useQuery(
+  const { data, failureCount, isLoading, isSuccess } = useQuery(
     ["taxBracket", formData.taxYear],
     () => fetchTaxBrackets(formData.taxYear)
   );
 
-  console.log(
-    "$data, iserror, islOading, error",
-    data,
-    isError,
-    isLoading,
-    error,
-    rest
-  );
-
-  const showErrorStatus = isMousingOverButton && isError;
-  const showSuccessStatus = hasSubmitted && isSuccess;
-
-  const { totalTax, taxesPerBracket } = calculatedTaxData;
+  const getStatus = React.useMemo(() => {
+    if (isMousingOverButton && failureCount > 0) {
+      return Status.ERROR;
+    }
+    if (hasSubmitted && isSuccess) {
+      return Status.SUCCESS;
+    }
+    return Status.DEFAULT;
+  }, [isMousingOverButton, hasSubmitted, isSuccess, failureCount]);
 
   return (
     <PageWrapper>
@@ -178,55 +123,23 @@ const TaxCalculator = () => {
         <h1>Canada Income Tax Calculator</h1>
         <h3>How much do you owe? Get an estimate of your taxes below!</h3>
       </TitleWrapper>
-      <StatusBar isVisible={showErrorStatus || showSuccessStatus}>
-        {showErrorStatus && <div>Error</div>}
-        {showSuccessStatus && <div>Success</div>}
-      </StatusBar>
+      <StatusBar status={getStatus} />
       <ContentWrapper>
         <Box>
           <UserForm
-            taxBrackets={[]}
+            taxBrackets={data?.tax_brackets}
             formData={formData}
             resetForm={resetForm}
             defaultTaxYearOptions={defaultTaxYearOptions}
-            disableButton={isLoading || isError}
+            disableButton={isLoading || failureCount > 0}
+            setHasSubmitted={setHasSubmitted}
             onButtonMouseEnter={onButtonMouseEnter}
             onButtonMouseLeave={onButtonMouseLeave}
-            onChange={onChange}
             setCalculatedTaxData={setCalculatedTaxData}
+            onChange={onChange}
           />
         </Box>
-        <ReportWrapper>
-          <h3>Your Results:</h3>
-          <ReportResult>
-            <ul>
-              <ResultRow>
-                <ResultRowContent>
-                  <ResultRowItemBold>Total Tax:</ResultRowItemBold>
-                  <ResultRowItemBold>$123123123</ResultRowItemBold>
-                </ResultRowContent>
-              </ResultRow>
-              <ResultRow>
-                <ResultRowContent>
-                  <ResultRowItemBold>Tax Breakdown:</ResultRowItemBold>
-                  <ResultRowItemBold></ResultRowItemBold>
-                </ResultRowContent>
-              </ResultRow>
-              <ResultRow>
-                <ResultRowContent>
-                  <ResultRowItemRegular>Tax Breakdown:</ResultRowItemRegular>
-                  <ResultRowItemRegular></ResultRowItemRegular>
-                </ResultRowContent>
-              </ResultRow>
-              <ResultRow>
-                <ResultRowContent>
-                  <ResultRowItemBold>Effective Tax:</ResultRowItemBold>
-                  <ResultRowItemBold>123%</ResultRowItemBold>
-                </ResultRowContent>
-              </ResultRow>
-            </ul>
-          </ReportResult>
-        </ReportWrapper>
+        <ResultsReport calculatedTaxData={calculatedTaxData} />
       </ContentWrapper>
     </PageWrapper>
   );
