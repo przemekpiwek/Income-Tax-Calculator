@@ -1,7 +1,13 @@
 import styled from "styled-components";
-import InputForm from "../components/Form";
 import * as React from "react";
-import { CalculateTaxesResponse } from "../utils/taxFunctions";
+import { useQuery } from "react-query";
+import { fetchTaxBrackets } from "../utils/taxBracket";
+import UserForm from "../components/UserForm";
+import {
+  CalculateTaxesResponse,
+  TaxYearOption,
+  UserFormFormData,
+} from "../types/types";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -52,20 +58,66 @@ const OutputContent = styled.div`
   text-align: left;
 `;
 
-const ColoredLine = styled.hr`
-  border: 0;
-  border-top: 1px solid var(--disabled);
-`;
+export const defaultTaxYearOptions: TaxYearOption[] = [
+  {
+    value: 2017,
+    displayValue: "2017",
+  },
+  {
+    value: 2018,
+    displayValue: "2018",
+  },
+  {
+    value: 2019,
+    displayValue: "2019",
+  },
+  {
+    value: 2020,
+    displayValue: "2020",
+  },
+];
 
-const LandingPage = () => {
+const defaultUserFormState = {
+  income: "",
+  taxYear: defaultTaxYearOptions[defaultTaxYearOptions.length - 1].displayValue,
+};
+
+const TaxCalculator = () => {
   const [calculatedTaxData, setCalculatedTaxData] =
     React.useState<CalculateTaxesResponse>({
       totalTax: 0,
       taxesPerBracket: [],
     });
 
+  const [formData, setFormData] = React.useState<UserFormFormData>({
+    ...defaultUserFormState,
+  });
+
+  const resetForm = () => {
+    console.log("RESET FORM");
+    setFormData(defaultUserFormState);
+  };
+
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const key = e.target.id;
+
+    setFormData((prevForm) => ({
+      ...prevForm,
+      [key]: e.target.value,
+    }));
+  };
+
+  const { data, isError, isLoading } = useQuery(
+    ["taxBracket", formData.taxYear],
+    () => fetchTaxBrackets(formData.taxYear)
+  );
+
+  console.log("$data", data);
+
   const { totalTax, taxesPerBracket } = calculatedTaxData;
-  console.log("$taxesPerBracket", taxesPerBracket);
+
   return (
     <PageWrapper>
       <TitleWrapper>
@@ -76,13 +128,19 @@ const LandingPage = () => {
       </TitleWrapper>
       <ContentWrapper>
         <Box>
-          <InputForm setCalculatedTaxData={setCalculatedTaxData} />
+          <UserForm
+            taxBrackets={[]}
+            formData={formData}
+            resetForm={resetForm}
+            defaultTaxYearOptions={defaultTaxYearOptions}
+            setCalculatedTaxData={setCalculatedTaxData}
+            onChange={onChange}
+          />
         </Box>
         <Box>
           <BoxTitle>Calculated tax output:</BoxTitle>
           <OutputContent>
             Estimated Tax Owed:{totalTax}
-            <ColoredLine />
             <ul>
               {taxesPerBracket.map((t, index) => (
                 <li key={index}>
@@ -95,7 +153,6 @@ const LandingPage = () => {
                 </li>
               ))}
             </ul>
-            <ColoredLine />
             Effective Tax Rate
           </OutputContent>
         </Box>
@@ -104,4 +161,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default TaxCalculator;

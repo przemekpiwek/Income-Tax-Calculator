@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "react-query";
-import LandingPage from "./pages/LandingPage";
 import { GlobalStyles } from "./styles/GlobalStyles";
+import TaxCalculator from "./pages/TaxCalculator";
 
 const queryClient = new QueryClient();
 
@@ -9,8 +9,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <GlobalStyles />
-        <LandingPage />
-        <ReactQueryDevtools />
+        <TaxCalculator />
       </QueryClientProvider>
     </>
   );
