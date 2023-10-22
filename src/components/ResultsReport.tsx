@@ -25,7 +25,7 @@ const ReportResult = styled.div`
 `;
 
 const ResultRow = styled.li`
-  border-top: 1px solid #0000001a;
+  border-top: 1px dotted #0000001a;
   padding-top: 8px;
   padding-bottom: 8px;
 `;
@@ -41,6 +41,10 @@ const ResultRowItemBold = styled.span`
   font-weight: 600;
 `;
 
+const ResultRowItemRegular = styled.span`
+  font-weight: 400;
+`;
+
 const ResultRowItemLight = styled.span`
   font-weight: 200;
 `;
@@ -53,10 +57,10 @@ const ResultTaxBreakdownWrapper = styled.div`
   margin-top: 16px;
 `;
 
-type ResultsTaxBreakdownRow = {
+type ResultsTaxBreakdownRowProps = {
   lastRow?: boolean;
 };
-const ResultsTaxBreakdownRow = styled.div<ResultsTaxBreakdownRow>`
+const ResultsTaxBreakdownRow = styled.div<ResultsTaxBreakdownRowProps>`
   display: flex;
   width: 100%;
   justify-content: space-between;
@@ -67,7 +71,7 @@ const ResultsTaxBreakdownRow = styled.div<ResultsTaxBreakdownRow>`
 const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
   const { income, totalTax, taxesPerBracket } = calculatedTaxData;
   const effectiveTaxRate = getEffectiveTaxRate(totalTax, income);
-
+  console.log("$", calculatedTaxData);
   return (
     <ReportWrapper>
       <h3>Your Results:</h3>
@@ -76,7 +80,7 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
           <ResultRow>
             <ResultRowContent>
               <ResultRowItemBold>Total Tax:</ResultRowItemBold>
-              <ResultRowItemBold>
+              <ResultRowItemBold data-testid="totalTaxOutput">
                 ${totalTax.toLocaleString()}
               </ResultRowItemBold>
             </ResultRowContent>
@@ -84,7 +88,9 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
           <ResultRow>
             <ResultRowContent>
               <ResultRowItemBold>Income:</ResultRowItemBold>
-              <ResultRowItemBold>${income.toLocaleString()}</ResultRowItemBold>
+              <ResultRowItemBold data-testid="incomeOutput">
+                ${income.toLocaleString()}
+              </ResultRowItemBold>
             </ResultRowContent>
           </ResultRow>
           <ResultRow>
@@ -94,7 +100,7 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
             {taxesPerBracket.map((bracket, index) => (
               <ResultTaxBreakdownWrapper key={index}>
                 <ResultsTaxBreakdownRow>
-                  <ResultRowItemLight>{`Minimum (bracket ${
+                  <ResultRowItemLight>{`Minimum (Bracket ${
                     index + 1
                   }):`}</ResultRowItemLight>
                   <ResultRowItemLight>
@@ -104,16 +110,16 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
                 <ResultsTaxBreakdownRow>
                   <ResultRowItemLight>Max:</ResultRowItemLight>
                   <ResultRowItemLight>
-                    ${bracket.max?.toLocaleString()}
+                    ${bracket.max?.toLocaleString() ?? "-"}
                   </ResultRowItemLight>
                 </ResultsTaxBreakdownRow>
                 <ResultsTaxBreakdownRow
                   lastRow={index === taxesPerBracket.length - 1}
                 >
                   <ResultRowItemLight>Tax:</ResultRowItemLight>
-                  <ResultRowItemLight>
+                  <ResultRowItemRegular>
                     ${bracket.tax.toLocaleString()}
-                  </ResultRowItemLight>
+                  </ResultRowItemRegular>
                 </ResultsTaxBreakdownRow>
               </ResultTaxBreakdownWrapper>
             ))}
@@ -121,7 +127,7 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
           <ResultRow>
             <ResultRowContent>
               <ResultRowItemBold>Effective Tax:</ResultRowItemBold>
-              <ResultRowItemBold>
+              <ResultRowItemBold data-testid="effectiveTaxOutput">
                 {effectiveTaxRate.toFixed(2)}%
               </ResultRowItemBold>
             </ResultRowContent>
