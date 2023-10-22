@@ -1,6 +1,5 @@
-import * as React from "react";
 import Select from "./Select";
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { render } from "@testing-library/react";
 import { defaultTaxYearOptions } from "../pages/TaxCalculator";
 
@@ -15,7 +14,6 @@ describe("Button", () => {
   });
   it("should display options upon user click", async () => {
     render(<Select {...defaultProps} />);
-
     const select = screen.getByTestId("select");
 
     fireEvent.click(select);
@@ -26,5 +24,13 @@ describe("Button", () => {
     expect(screen.getByText(2022)).toBeInTheDocument();
   });
 
-  it.todo("should call onChange funtion upon user change");
+  it("should call onChange funtion upon user change", async () => {
+    const onChangeSpy = jest.fn();
+
+    render(<Select {...defaultProps} value="2020" onChange={onChangeSpy} />);
+    const select = screen.getByTestId("select");
+
+    fireEvent.change(select, { target: { value: "2019" } });
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+  });
 });

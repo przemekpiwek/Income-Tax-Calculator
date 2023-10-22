@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import ResultsReport from "./ResultsReport";
 import { getEffectiveTaxRate } from "../utils/taxFunctions";
 
