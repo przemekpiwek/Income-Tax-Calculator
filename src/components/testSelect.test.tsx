@@ -20,10 +20,10 @@ describe("Button", () => {
 
     fireEvent.click(select);
 
-    expect(screen.getByText(2017)).toBeInTheDocument();
-    expect(screen.getByText(2018)).toBeInTheDocument();
     expect(screen.getByText(2019)).toBeInTheDocument();
     expect(screen.getByText(2020)).toBeInTheDocument();
+    expect(screen.getByText(2021)).toBeInTheDocument();
+    expect(screen.getByText(2022)).toBeInTheDocument();
   });
 
   it.todo("should call onChange funtion upon user change");

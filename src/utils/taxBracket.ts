@@ -7,21 +7,19 @@ const options = {
 };
 
 export const fetchTaxBrackets = async (taxYear: string) => {
-  const response = await fetch(
-    `http://localhost:5000/tax-calculator/tax-year/${taxYear}`,
-    options
-  );
-
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-
   try {
+    const response = await fetch(
+      `http://localhost:5000/tax-calculator/tax-year/${taxYear}`,
+      options
+    );
+
+    if (!response.ok) {
+      throw new Error(`${response.statusText}`);
+    }
     const data = await response.json();
-    console.log("$response", data);
     return data;
   } catch (error) {
-    throw new Error("Error parsing response data");
+    throw new Error(`Server Error:${error}`);
   }
 };
 

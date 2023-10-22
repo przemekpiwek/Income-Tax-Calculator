@@ -31,3 +31,10 @@ export type UserFormFormData = {
   income: string;
   taxYear: string;
 };
+
+export enum Status {
+  SUCCESS = "success",
+  ERROR = "error",
+  LOADING = "loading",
+  DEFAULT = "default",
+}

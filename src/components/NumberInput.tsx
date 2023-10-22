@@ -21,6 +21,7 @@ const Label = styled.label`
   pointer-events: none;
   left: 20px;
   top: -10px;
+  font-weight: 600;
 `;
 
 const BaseInput = styled.input`
@@ -29,6 +30,7 @@ const BaseInput = styled.input`
   border: 2px var(--secondary) solid;
   margin: 16px;
   width: 100%;
+  padding-left: 10px;
 
   &:focus {
     outline: none;

@@ -97,4 +97,10 @@ h4 {font-size: 1.44rem;}
 
 h5 {font-size: 1.2rem;}
 
+input, select {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
 `;

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import styled from "styled-components";
 
 type SelectProps = {
@@ -19,6 +19,7 @@ const Label = styled.label`
   pointer-events: none;
   left: 20px;
   top: -10px;
+  font-weight: 600;
 `;
 
 const BaseSelect = styled.select`
@@ -27,6 +28,14 @@ const BaseSelect = styled.select`
   border: 2px var(--secondary) solid;
   margin: 16px;
   width: 100%;
+  padding-left: 10px;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='blue' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 12px;
 
   &:focus {
     outline: none;

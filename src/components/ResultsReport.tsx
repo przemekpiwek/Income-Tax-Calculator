@@ -71,7 +71,6 @@ const ResultsTaxBreakdownRow = styled.div<ResultsTaxBreakdownRowProps>`
 const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
   const { income, totalTax, taxesPerBracket } = calculatedTaxData;
   const effectiveTaxRate = getEffectiveTaxRate(totalTax, income);
-  console.log("$", calculatedTaxData);
   return (
     <ReportWrapper>
       <h3>Your Results:</h3>
@@ -110,7 +109,9 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
                 <ResultsTaxBreakdownRow>
                   <ResultRowItemLight>Max:</ResultRowItemLight>
                   <ResultRowItemLight>
-                    ${bracket.max?.toLocaleString() ?? "-"}
+                    {bracket.max === undefined
+                      ? "-"
+                      : `$${bracket.max?.toLocaleString()}`}
                   </ResultRowItemLight>
                 </ResultsTaxBreakdownRow>
                 <ResultsTaxBreakdownRow
