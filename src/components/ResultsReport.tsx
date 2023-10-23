@@ -27,7 +27,6 @@ const ReportResult = styled.div`
 const ResultRow = styled.li`
   border-top: 1px dotted #0000001a;
   padding-top: 8px;
-  padding-bottom: 8px;
 `;
 
 const ResultRowContent = styled.div`
@@ -65,7 +64,7 @@ const ResultsTaxBreakdownRow = styled.div<ResultsTaxBreakdownRowProps>`
   width: 100%;
   justify-content: space-between;
   border-bottom: ${({ lastRow }) => (lastRow ? "0px" : "1px solid #f3f3f3")};
-  padding-bottom: 5px;
+  padding-top: 2px;
 `;
 
 const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
@@ -102,15 +101,13 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
             {taxesPerBracket.map((bracket, index) => (
               <ResultTaxBreakdownWrapper key={index}>
                 <ResultsTaxBreakdownRow>
-                  <ResultRowItemLight>{`Minimum (Bracket ${
-                    index + 1
-                  }):`}</ResultRowItemLight>
+                  <ResultRowItemLight>Lower Limit:</ResultRowItemLight>
                   <ResultRowItemLight>
                     ${bracket.min.toLocaleString()}
                   </ResultRowItemLight>
                 </ResultsTaxBreakdownRow>
                 <ResultsTaxBreakdownRow>
-                  <ResultRowItemLight>Max:</ResultRowItemLight>
+                  <ResultRowItemLight>Higher Limit:</ResultRowItemLight>
                   <ResultRowItemLight>
                     {bracket.max === undefined
                       ? "-"
@@ -120,7 +117,9 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
                 <ResultsTaxBreakdownRow
                   lastRow={index === taxesPerBracket.length - 1}
                 >
-                  <ResultRowItemLight>Tax:</ResultRowItemLight>
+                  <ResultRowItemLight>
+                    {`Taxes Bracket ${index + 1}`}:
+                  </ResultRowItemLight>
                   <ResultRowItemRegular>
                     ${bracket.tax.toLocaleString()}
                   </ResultRowItemRegular>
