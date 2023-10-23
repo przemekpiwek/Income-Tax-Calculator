@@ -1,5 +1,11 @@
 import { CalculateTaxesResponse, TaxBracket } from "../types/types";
 
+/**
+ * Calculate total taxes based on income and tax brackets.
+ * @param {number} income - Annual income.
+ * @param {TaxBracket[]} taxBrackets - Tax brackets for a given year.
+ * @returns {CalculateTaxesResponse} - Object with total taxes, taxes per bracket, and income
+ */
 export const calculateTaxes = (
   income: number,
   taxBrackets: TaxBracket[]
@@ -31,7 +37,7 @@ export const calculateTaxes = (
 
     taxesPerBracket.push({
       ...taxBracket,
-      tax: totalTax,
+      tax: totalTaxForBracket,
     });
 
     remainingIncome -= taxableAmountForBracket;
@@ -43,8 +49,14 @@ export const calculateTaxes = (
   };
 };
 
+/**
+ * Calculate effective tax rate based on total tax and income.
+ * @param {number} totalTax - Total tax owed.
+ * @param {number} income - Annual income for a given year.
+ * @returns {number} - Percentage rate
+ */
 export const getEffectiveTaxRate = (totalTax: number, income: number) => {
-  if (income === 0) return 0;
+  if (income <= 0 || totalTax <= 0) return 0;
 
   return (totalTax / income) * 100;
 };

@@ -79,7 +79,10 @@ const ResultsReport: React.FC<ResultsReportProps> = ({ calculatedTaxData }) => {
           <ResultRow>
             <ResultRowContent>
               <ResultRowItemBold>Total Tax:</ResultRowItemBold>
-              <ResultRowItemBold data-testid="totalTaxOutput">
+              <ResultRowItemBold
+                data-testid="totalTaxOutput"
+                style={{ color: "var(--error)" }}
+              >
                 ${totalTax.toLocaleString()}
               </ResultRowItemBold>
             </ResultRowContent>

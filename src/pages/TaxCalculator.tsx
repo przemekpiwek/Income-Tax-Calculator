@@ -101,7 +101,6 @@ const TaxCalculator = () => {
   }, []);
 
   const resetForm = React.useCallback(() => {
-    console.log("RESET FORM");
     setHasSubmitted(false);
   }, []);
 
@@ -118,8 +117,6 @@ const TaxCalculator = () => {
     },
     []
   );
-
-  console.log("$status", hasSubmitted, isError, isSuccess, isLoading);
 
   const status = () => {
     if (isMousingOverButton && isLoading) {
