@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import StatusBar from "./StatusBar";
 import { Status } from "../types/types";
 
-describe("Button", () => {
+describe("StatusBar", () => {
   it("should render correctly", () => {
     render(<StatusBar status={Status.DEFAULT} />);
     expect(screen.getByRole("statusBar", { hidden: true })).toBeInTheDocument();

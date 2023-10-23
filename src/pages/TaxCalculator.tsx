@@ -86,38 +86,40 @@ const TaxCalculator = () => {
     React.useState<CalculateTaxesResponse>(defaultTaxDataState);
   const { taxYear } = formData;
 
-  const { isLoading, error, data, isSuccess, failureCount, isError, ...rest } =
-    useQuery({
-      queryKey: ["taxBracket", taxYear],
-      queryFn: () => fetchTaxBrackets(taxYear),
-      retry: true,
-    });
+  const { isLoading, data, isSuccess, failureCount, isError } = useQuery({
+    queryKey: ["taxBracket", taxYear],
+    queryFn: () => fetchTaxBrackets(taxYear),
+    retry: true,
+  });
 
-  const onButtonMouseEnter = () => {
+  const onButtonMouseEnter = React.useCallback(() => {
     setIsMousingOverButton(true);
-  };
+  }, []);
 
-  const onButtonMouseLeave = () => {
+  const onButtonMouseLeave = React.useCallback(() => {
     setIsMousingOverButton(false);
-  };
+  }, []);
 
-  const resetForm = () => {
+  const resetForm = React.useCallback(() => {
     console.log("RESET FORM");
     setHasSubmitted(false);
-  };
+  }, []);
 
-  const onChangeFormElement = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    if (hasSubmitted) {
-      resetForm();
-    }
-    const key = e.target.id;
-    setFormData((prevForm) => ({
-      ...prevForm,
-      [key]: e.target.value,
-    }));
-  };
+  const onChangeFormElement = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      if (hasSubmitted) {
+        resetForm();
+      }
+      const key = e.target.id;
+      setFormData((prevForm) => ({
+        ...prevForm,
+        [key]: e.target.value,
+      }));
+    },
+    []
+  );
+
+  console.log("$status", hasSubmitted, isError, isSuccess, isLoading);
 
   const status = () => {
     if (isMousingOverButton && isLoading) {
@@ -133,7 +135,7 @@ const TaxCalculator = () => {
   };
 
   return (
-    <PageWrapper>
+    <PageWrapper data-testid="taxCalculator">
       <TitleWrapper>
         <h1>Canada Income Tax Calculator</h1>
         <h3>How much do you owe? Get an estimate of your taxes below!</h3>

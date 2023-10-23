@@ -1,9 +1,9 @@
 import Select from "./Select";
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { render } from "@testing-library/react";
 import { defaultTaxYearOptions } from "../pages/TaxCalculator";
 
-describe("Button", () => {
+describe("Select", () => {
   const defaultProps = {
     id: "test",
     options: defaultTaxYearOptions,
