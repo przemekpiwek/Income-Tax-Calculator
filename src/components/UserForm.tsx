@@ -63,7 +63,6 @@ const UserForm: React.FC<FormProps> = ({
       <fieldset>
         <FormWrapper>
           <NumberInput
-            autofocus
             id="income"
             label="Annual income tax"
             placeholder="$90,000"

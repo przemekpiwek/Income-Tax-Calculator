@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 
 type InputProps = {
-  autofocus?: boolean;
   id: string;
   label?: string;
   value?: string;
@@ -56,6 +55,7 @@ const NumberInput: React.FC<InputProps> = ({
     <InputWrapper>
       <Label htmlFor={id}>{label}</Label>
       <BaseInput
+        autoFocus
         data-testid="input"
         disabled={isDisabled}
         type="number"
